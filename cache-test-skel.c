@@ -6,17 +6,17 @@ Due: 12/7/18, 11:00 pm
 
 Mystery Cache Geometries:
 mystery0:
-    block size = 
-    cache size = 
-    associativity = 
+    block size = 4194304
+    cache size = 64
+    associativity = 16
 mystery1:
-    block size = 
-    cache size = 
-    associativity = 
+    block size = 4 bytes
+    cache size = 4096 bytes
+    associativity = 1
 mystery2:
-    block size = 
-    cache size = 
-    associativity = 
+    block size = 4096 bytes
+    cache size = 32 bytes
+    associativity = 128
 */
 
 #include <stdlib.h>
@@ -34,9 +34,12 @@ int get_cache_size(int block_size) {
   int x = 1;
   while(x) {
 	  access_cache(i);
-	  for(int c = 0; c < i + block_size; c+= block_size)
-		  if(!access_cache(c))
+	  for(int c = 0; c < i + block_size; c+= block_size) {
+		   if(!access_cache(c)) {
 			  x = 0;
+			  break;
+			}
+	  }
 	  i += block_size;
   }
   return i - block_size;
@@ -52,9 +55,12 @@ int get_cache_assoc(int size) {
 	int x = 1;
 	while(x) {
 		access_cache(i);
-		for(int c = 0; c < i + size; c+= size)
-			if(!access_cache(c))
+		for(int c = 0; c < i + size; c+= size) {
+			if(!access_cache(c)) {
 				x = 0;
+				break;
+			}
+		}
 		i+= size;
 	}
 	return (i - size)/size;
