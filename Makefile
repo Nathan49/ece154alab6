@@ -5,3 +5,4 @@ endif
 
 cache-test: cache-test-skel.c $(TEST_CACHE)
 	gcc -Wall $^ -o $@ -m32
+

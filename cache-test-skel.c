@@ -1,8 +1,8 @@
 /*
-YOUR NAME HERE
-ECE 154A - Fall 2012
-Lab 2 - Mystery Caches
-Due: 12/3/12, 11:00 pm
+Nathan Bornfreund
+ECE 154A - Fall 2018
+Lab 6 - Mystery Caches
+Due: 12/7/18, 11:00 pm
 
 Mystery Cache Geometries:
 mystery0:
@@ -29,8 +29,17 @@ mystery2:
 */
 int get_cache_size(int block_size) {
   /* YOUR CODE GOES HERE */
-  
-  return -1;
+  flush_cache();
+  int i = 0;
+  int x = 1;
+  while(x) {
+	  access_cache(i);
+	  for(int c = 0; c < i + block_size; c+= block_size)
+		  if(!access_cache(c))
+			  x = 0;
+	  i += block_size;
+  }
+  return i - block_size;
 }
 
 /*
@@ -38,7 +47,17 @@ int get_cache_size(int block_size) {
 */
 int get_cache_assoc(int size) {
   /* YOUR CODE GOES HERE */
-  return -1;
+	flush_cache();
+	int i = 0;
+	int x = 1;
+	while(x) {
+		access_cache(i);
+		for(int c = 0; c < i + size; c+= size)
+			if(!access_cache(c))
+				x = 0;
+		i+= size;
+	}
+	return (i - size)/size;
 }
 
 /*
@@ -46,7 +65,15 @@ int get_cache_assoc(int size) {
 */
 int get_block_size() {
   /* YOUR CODE GOES HERE */
-  return -1;
+	flush_cache();
+	int i = 0;
+	while(1) {
+		access_cache(i);
+		i += 4;
+		if(!access_cache(i))
+			break;
+	}
+	return i;
 }
 
 int main(void) {
