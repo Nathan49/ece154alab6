@@ -14,8 +14,8 @@ mystery1:
     cache size = 4096 bytes
     associativity = 1
 mystery2:
-    block size = 4096 bytes
-    cache size = 32 bytes
+    block size = 32 bytes
+    cache size = 4096 bytes
     associativity = 128
 */
 
@@ -31,18 +31,26 @@ int get_cache_size(int block_size) {
   /* YOUR CODE GOES HERE */
   flush_cache();
   int i = 0;
+  int z = i;
   int x = 1;
-  while(x) {
-	  access_cache(i);
+  while(1) {
+	  for(int k = z; k < i + block_size; k += block_size) {
+		 access_cache(k);
+	  } 
 	  for(int c = 0; c < i + block_size; c+= block_size) {
-		   if(!access_cache(c)) {
-			  x = 0;
-			  break;
-			}
+		if(!access_cache(c)) {
+		  	x = 0;
+		  	break;
+		}
 	  }
-	  i += block_size;
+		if(!x)
+			break;
+		z = i;
+	  i *= 2;
+	  if(i == 0)
+		  i+=1;
   }
-  return i - block_size;
+  return i;
 }
 
 /*
